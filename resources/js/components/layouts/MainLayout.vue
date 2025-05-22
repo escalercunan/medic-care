@@ -17,16 +17,10 @@
 
 
   <div class="min-h-screen bg-blue-100 flex items-center justify-center">
-    <div class="bg-white p-10 rounded shadow">
-      <h1 class="text-3xl font-bold text-blue-800">🎉 Tailwind is working!</h1>
-      <p class="text-gray-600 mt-2">This is styled with Tailwind CSS.</p>
-    </div>
+      <router-view /> <!-- 👈 This renders the page -->
   </div>
 
 
-
-
-      <router-view /> <!-- 👈 This renders the page -->
     </main>
   </div>
 </template>
