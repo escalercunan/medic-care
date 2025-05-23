@@ -13,13 +13,34 @@ const routes = [
     path: '/',
     component: MainLayout,
     children: [
-      { path: '', component: Dashboard },
-      { path: 'profile', component: Profile },
+      {
+        path: 'sas',
+        component: Dashboard,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: 'profile',
+        component: Profile,
+        meta: { requiresAuth: true },
+      },
     ],
   },
 ];
 
-export default createRouter({
+const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
+
+router.beforeEach((to, from, next) => {
+  const isLoggedIn = !!localStorage.getItem('auth_token'); // simple auth check
+
+  if (to.meta.requiresAuth && !isLoggedIn) {
+    next('/login');
+  } else {
+    next(); // allow navigation
+  }
+});
+
+export default router;

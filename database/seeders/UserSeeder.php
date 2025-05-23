@@ -1,25 +1,23 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use App\Models\User;
 
 class UserSeeder extends Seeder
 {
-    public function run()
+    public function run(): void
     {
-        // Inserting multiple users
-        User::create([
-            'name' => 'Alice Smith',
-            'email' => 'alice@example.com',
-            'password' => bcrypt('password123'),
-        ]);
-
-        User::create([
-            'name' => 'Bob Johnson',
-            'email' => 'bob@example.com',
-            'password' => bcrypt('password456'),
+        \DB::table('users')->insert([
+            'name' => 'Test User',
+            'email' => 'test@example.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'),
+            'remember_token' => Str::random(10),
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 }

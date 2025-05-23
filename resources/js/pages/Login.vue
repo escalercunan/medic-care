@@ -2,7 +2,6 @@
   <div class="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center px-4">
     <div class="w-full max-w-md bg-white shadow-lg rounded-xl p-8">
       <div class="mb-6 text-center">
-        
         <h1 class="text-3xl font-bold text-red-800">Sign in to your account</h1>
         <p class="text-gray-500 text-sm">Welcome back! Please login to continue.</p>
       </div>
@@ -52,9 +51,9 @@
   </div>
 </template>
 
-
 <script>
-import axios from 'axios';
+import axios from 'axios'
+import { useUserStore } from '@/store/user'
 
 export default {
   data() {
@@ -65,24 +64,30 @@ export default {
   },
   methods: {
     async handleLogin() {
+      const userStore = useUserStore()
+
       try {
-        const response = await axios.post('http://localhost:8000/api/login', {
+        // 1. Send login request
+        const response = await axios.post('http://127.0.0.1:8000/api/login', {
           email: this.email,
           password: this.password,
         });
 
         const token = response.data.access_token;
 
-        // Store token in localStorage or cookie
-        localStorage.setItem('token', token);
-
-        // Set token for future requests
+        // 2. Save token
+        localStorage.setItem('auth_token', token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-        // Redirect to dashboard or home
+        // 3. Fetch and store user
+        await userStore.getUser();
+
+        // 4. Redirect
         this.$router.push('/');
       } catch (error) {
-        alert('Login failed: ' + (error.response?.data?.error || error.message));
+        const message =
+          error.response?.data?.error || 'Login failed. Please check your credentials.';
+        alert(message);
       }
     },
   },
